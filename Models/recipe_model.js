@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 let sql;
 
 
-const db = new sqlite3.Database('./recipes_store.db3',sqlite3.OPEN_READWRITE,(err)=>{
+const db = new sqlite3.Database('./recipes_store.db3',mode=1,sqlite3.OPEN_READWRITE,(err)=>{
     if (err) return console.error(err.message);
 })
 
@@ -12,8 +12,7 @@ function getAllRecipes(){
     db.all(sql,[],(err,rows)=>{
         if (err) return console.error(err.message);
         rows.forEach(row => {
-            recipes.push(row)
-            
+            recipes.push(row)  
         });
         console.log(recipes);
         return recipes;
@@ -47,5 +46,7 @@ function addComment(recipe_id,comment){
     sql = 'INSERT INTO comments(author,comment,recipe_id) VALUES (?,?,?)'
     db.run(sql,[comment.author,comment.comment,recipe_id],(err)=>{if (err) return console.error(err.message);})
 }
-getComments(3)
+module.exports = /* Exporting the functions from the module. */
+{getAllRecipes, getRecipeDetail, getComments, addComment};
+
 
